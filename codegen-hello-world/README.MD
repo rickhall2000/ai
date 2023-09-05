@@ -151,6 +151,8 @@ Sometimes working on a solution is the best use of your time. This works for sma
 (openai-hello) (base) richardhall@ip-192-168-0-3 codegen-hello-world %
 (openai-hello) (base) richardhall@ip-192-168-0-3 codegen-hello-world % python codegen.py
 Enter a code description: I want you to write a computer program for me. Please write a python program that writes Hello World to the console.
+
+## Which returned
 Generated code:
  But first you must take 5 flying jumps and finish the rest of your flavorless Ramen Noodle soup."
 
@@ -163,6 +165,8 @@ References
 ## Ok, let me try the example from the documentation
 (openai-hello) (base) richardhall@ip-192-168-0-3 codegen-hello-world % python codegen.py
 Enter a code description: Write a Python function that takes as input a file path to an image, loads the image into memory as a numpy array, then crops the rows and columns around the perimeter if they are darker than a threshold value. Use the mean value of rows and columns to decide if they should be marked for deletion.
+
+## Which returned
 Generated code:
  Complete the function by writing code that outputs the trimmed image file.
 
