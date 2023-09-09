@@ -83,3 +83,27 @@ def using_functions():
         model="gpt-3.5-turbo-0613", messages=messages,
     )
     
+def test_embedding(text):
+    result = openai.Embedding.create(
+        model="text-embedding-ada-002", input=text
+    )
+    print(result)
+    print(result['data'])
+    print(type(result['data']))
+    print(len(result['data'][0]['embedding'])) # 1536
+    
+def moderation():
+    response = openai.Moderation.create(
+        model="text-moderation-latest",
+        input="I want to kill my neighbor."
+    )    
+    # per the book, this gets flagged for violence
+    # And then it shows scores, hate was 0.04, violence was .94, all others were e-06 or less
+    
+    
+    
+    
+if __name__ == "__main__":
+    # example1()
+    # using_functions()
+    test_embedding("I like to eat pizza")
