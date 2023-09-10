@@ -1,0 +1,68 @@
+import whisper
+import openai 
+import gradio as gr
+
+model = whisper.load_model("base")
+
+def transcribe(file):
+    print(file)
+    transcription = model.transcribe(file)
+    return transcription["text"]
+
+def generate_answer(messages):
+    response = oepnai.ChatCompletion.create(
+        model="gpt-3.5-turbo", messages=messages
+    )
+    return response["choices"][0]["message"]["content"]
+
+prompts = {
+    "START": "Classify the intent of the next input. \
+        Is it: WRITE_EMAIL, QUESTION, OTHER ? Only answer one word.",
+    "Question": "If you can answer the question: ANSWER, \
+        if you need more inforattion: MORE, \
+        if you cannot answer: OTHER. Only answer one word.",
+    "ANSWER": "Now answer the question",
+    "MORE": "Now ask for more inforamtion",
+    "OTHER": "Now tell me you cannot answer the question or do the action",
+    "WRITE_EMAIL": 'If the subject or recipient or message is missing, \
+        answer "MORE". Else if you have all the inforation, \
+        answer "ACTION_WRITE_EMAIL |\
+        subject:subject, recipient:recipient, message:message".',
+}
+
+actions = {
+    "ACTION_WRITE_EMAIL": "The mail has been sent. \
+    Now tell me the action is done in natural language."
+}
+
+def start(user_input):
+    messages = [{"role": "user", "conent": prompts}]
+    messages.append({"role": "user", "content": user_input})
+    return discussion(messages, "")
+
+def discussion(messages, last_step):
+    answer = generate_answer(messages)
+    if answer in prompts.keys():
+        messages.append({"role": "assistant", "content": answer})
+        messages.append({"role": "user", "content": prompts[answer]})
+        return discussion(messages, answer) 
+    elif answer in actions.keys():
+        do_action(answer)
+    else:
+        if last_step != "MORE":
+            messages=[]
+        last_step = "END"
+        return answer
+    
+def do_action(action):
+    print("doing action " + action)
+    return ("I did the action " + action)
+
+def start_chat(file):
+    input = transcribe(file)
+    return start(input)
+
+def kick_it_off():
+    gr.interface(fn=start_chat, live=True, inputs=gr.Audio(source="microphone", type="filepath"),
+                outputs="text",
+    ).launch()
